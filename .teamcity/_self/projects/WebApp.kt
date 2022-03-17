@@ -409,6 +409,29 @@ object RunAllUnitTests : BuildType({
 			"""
 		}
 		bashNodeScript {
+			name = "Ensure prepack works correctly"
+			executionMode = BuildStep.ExecutionMode.RUN_ON_FAILURE
+			scriptContent = """
+				unset NODE_ENV
+				unset CALYPSO_ENV
+
+				# Test prepack for a single package. Ideally, we would run every
+				# prepack script across the monorepo. Unfortunately, this doesn't
+				# work. It likely fails because compiling each package individually
+				# isn't the same as compiling all the projects together. In order
+				# to compile one project individually, it may depend on the result
+				# of all other projects having been compiled as a group. When every
+				# package tries to compile individually at the same time, that
+				# implicit dependency on the "group" result is not respected,and
+				# some of the builds fail.
+
+				# In the meantime, we need to ensure that the transpile and
+				# copy-asset scripts work correctly in the context of prepack, so
+				# I've chosen a single package which can test that entire workflow.
+				yarn workspace @automattic/social-previews run prepack --verbose
+			"""
+		}
+		bashNodeScript {
 			name = "Run unit tests for build tools"
 			executionMode = BuildStep.ExecutionMode.RUN_ON_FAILURE
 			scriptContent = """
