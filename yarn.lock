@@ -158,6 +158,7 @@ __metadata:
     "@automattic/calypso-eslint-overrides": "workspace:^"
     "@automattic/calypso-typescript-config": "workspace:^"
     "@automattic/webpack-rtl-plugin": "workspace:^"
+    "@babel/cli": ^7.17.6
     "@babel/compat-data": ^7.17.0
     "@babel/core": ^7.17.5
     "@types/webpack-env": ^1.16.3
@@ -1578,10 +1579,10 @@ __metadata:
   linkType: soft
 
 "@babel/cli@npm:^7.17.6":
-  version: 7.17.6
-  resolution: "@babel/cli@npm:7.17.6"
+  version: 7.17.10
+  resolution: "@babel/cli@npm:7.17.10"
   dependencies:
-    "@jridgewell/trace-mapping": ^0.3.4
+    "@jridgewell/trace-mapping": ^0.3.8
     "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents.3
     chokidar: ^3.4.0
     commander: ^4.0.1
@@ -1590,7 +1591,6 @@ __metadata:
     glob: ^7.0.0
     make-dir: ^2.1.0
     slash: ^2.0.0
-    source-map: ^0.5.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -1601,7 +1601,7 @@ __metadata:
   bin:
     babel: ./bin/babel.js
     babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: aba719c2217937879ab285545335ba7bdc64f40290594a4939c69a5147e3a95e7da4a02eeb16ab935ec96000faca2d065a929ca846ce8ce4fc62385cfd32d214
+  checksum: 31312256632249a5a38e520298dcf35caee626f3264ce17e8e6d1f0334620a61f8897ba6677253fe8038e412e35c80c1117cc39aa1680ee348d394f6746034dc
   languageName: node
   linkType: hard
 
@@ -4192,13 +4192,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.0, @jridgewell/trace-mapping@npm:^0.3.4":
-  version: 0.3.4
-  resolution: "@jridgewell/trace-mapping@npm:0.3.4"
+"@jridgewell/trace-mapping@npm:^0.3.0, @jridgewell/trace-mapping@npm:^0.3.8":
+  version: 0.3.13
+  resolution: "@jridgewell/trace-mapping@npm:0.3.13"
   dependencies:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
-  checksum: ee62b4d810e417f81eb27c9385089172b40286329d9a81fcff999fede883ae95ca75bcaf58793cae0a3981d17302f223656d72ed9bbd1d5a96c170b2dfdc5259
+  checksum: 28d2c695e047ad448561a90c32241ca8b6d1416165129b878c235a809be727330d13aac005e1a6deb3cd5f0ef11bf292d15403e89b2b971b19943c3e56776524
   languageName: node
   linkType: hard
 
