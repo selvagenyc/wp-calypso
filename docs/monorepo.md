@@ -151,15 +151,26 @@ yarn workspace @automattic/your-package run your-script
 
 ## Developing packages
 
+### Installation
+
 When developing packages in Calypso repository that external consumers (like Jetpack repository) depend on, you might want to test them without going through the publishing flow first.
 
-1. Enter the package you're testing
-1. Run [`yarn link`](https://classic.yarnpkg.com/en/docs/cli/link/) — the package will be installed on global scope and symlinked to the folder in Calypso
-1. Enter the consumer's folder (such as Jetpack)
-1. Type `yarn link @automattic/package-name` — the package will be symlinked between Calypso and Jetpack and any modifications you make in Calypso, will show up in Jetpack.
-1. Remember to build your changes between modifications in Calypso.
+1. Enter the package under development.
+2. Run [`yarn install`](https://yarnpkg.com/cli/install).
+3. Enter the consumer's package (eg. Jetpack).
+4. Run `yarn add <path_to_package_under_development>`.
 
-Note that if you're building with Webpack, you may need to turn off [`resolve.symlinks`](https://webpack.js.org/configuration/resolve/#resolvesymlinks) for it to work as expected.
+Remember to build or watch for changes.
+
+### Include as dependency
+
+Once the package is ready to be included as a dependency in other @automattic packages, follow the checklist.
+
+tsconfig.json (consuming package)
+- include reference to the new package under `references` section.
+
+tsconfig.json (top level package)
+- include reference to the new package under `references` section.
 
 ## Publishing
 
