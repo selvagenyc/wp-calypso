@@ -164,7 +164,7 @@ Remember to build or watch for changes.
 
 ### Include as dependency
 
-Once the package is ready to be included as a dependency in other @automattic packages, follow the checklist.
+Once the package is ready to be included as a dependency in other @automattic packages (without being published), follow the checklist.
 
 tsconfig.json (consuming package)
 - include reference to the new package under `references` section.
