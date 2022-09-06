@@ -157,7 +157,6 @@ export function getPurchasesBySite(
 				...currentValue,
 				currentPurchaseStatus: getPurchaseStatus( currentValue as PurchaseWithStatus ),
 			} ) as PurchaseWithStatus[];
-			site.isConnected = true;
 			return result;
 		}
 
