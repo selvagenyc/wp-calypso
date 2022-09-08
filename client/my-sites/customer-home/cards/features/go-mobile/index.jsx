@@ -31,7 +31,7 @@ export const GoMobile = ( { email, sendMobileLoginEmail } ) => {
 				<div className="go-mobile__title">
 					<CardHeading tagName="h2">{ translate( 'Get the WordPress app' ) }</CardHeading>
 					<h3 className="go-mobile__subheader customer-home__card-subheader">
-						{ translate( 'Inspiration strikes anytime, anywhere.' ) }
+						{ translate( 'Inspiration strikes any time, anywhere.' ) }
 					</h3>
 				</div>
 				<div className="go-mobile__app-badges">
