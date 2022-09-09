@@ -7,13 +7,12 @@ import wpToJpImage from 'calypso/assets/images/jetpack/wp-to-jp.svg';
 import AppsBadge from 'calypso/blocks/get-apps/apps-badge';
 import CardHeading from 'calypso/components/card-heading';
 import userAgent from 'calypso/lib/user-agent';
+import { JETPACK_APP_FOCUS_DATE } from 'calypso/my-sites/customer-home/cards/constants';
 import { recordTracksEvent, withAnalytics } from 'calypso/state/analytics/actions';
 import { sendEmailLogin } from 'calypso/state/auth/actions';
 import { getCurrentUserEmail, getCurrentUserDate } from 'calypso/state/current-user/selectors';
 
 import './style.scss';
-
-const JETPACK_APP_FOCUS_DATE = new Date( 2022, 9, 8 ).getTime();
 
 export const GoMobile = ( { isUserNewerThanJetpackAppFocus, email, sendMobileLoginEmail } ) => {
 	const translate = useTranslate();

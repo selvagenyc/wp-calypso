@@ -12,6 +12,7 @@ export const FEATURE_GO_MOBILE = 'home-feature-go-mobile';
 export const FEATURE_QUICK_START = 'home-feature-quick-start';
 export const FEATURE_STATS = 'home-feature-stats';
 export const FEATURE_SUPPORT = 'home-feature-support';
+export const JETPACK_APP_FOCUS_DATE = new Date( 2022, 9, 8 ).getTime();
 export const NOTICE_SITE_LAUNCH_SELLER_UPSELL = 'home-site-launch-seller-upsell';
 export const NOTICE_CELEBRATE_SITE_CREATION = 'home-notice-celebrate-site-creation';
 export const NOTICE_CELEBRATE_SITE_LAUNCH = 'home-notice-celebrate-site-launch';
