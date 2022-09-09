@@ -1,6 +1,8 @@
+import config from '@automattic/calypso-config';
 import languages from '@automattic/languages';
 import { find } from 'lodash';
 import { stringify as stringifyQs } from 'qs';
+import { searchAsync } from 'calypso/data/marketplace/search-api';
 import { RequestError } from './request-error';
 
 /**
@@ -13,6 +15,8 @@ const DEFAULT_FIRST_PAGE = 1;
 
 const WPORG_THEMES_ENDPOINT = 'https://api.wordpress.org/themes/info/1.1/';
 const WPORG_CORE_TRANSLATIONS_ENDPOINT = 'https://api.wordpress.org/translations/core/1.0/';
+
+const isJetpackSearchEnabled = config.isEnabled( 'marketplace-jetpack-plugin-search' );
 
 function getWporgLocaleCode( currentUserLocale ) {
 	let wpOrgLocaleCode = find( languages, { langSlug: currentUserLocale } ).wpLocale;
@@ -43,7 +47,7 @@ async function getRequest( url, query ) {
  * @param {string} pluginSlug The plugin identifier.
  * @returns {Promise} Promise with the plugins details.
  */
-export function fetchPluginInformation( pluginSlug, locale ) {
+export async function fetchPluginInformation( pluginSlug, locale ) {
 	const query = {
 		action: 'plugin_information',
 		'request[slug]': pluginSlug.replace( new RegExp( '\\.php$' ), '' ),
@@ -51,7 +55,23 @@ export function fetchPluginInformation( pluginSlug, locale ) {
 		'request[fields]': 'icons,short_description,contributors,-added,-donate_link,-homepage',
 	};
 
-	return getRequest( WPORG_PLUGINS_ENDPOINT, query );
+	const request = await getRequest( WPORG_PLUGINS_ENDPOINT, query );
+	let jetpackSearch;
+	let author_login;
+	if ( isJetpackSearchEnabled ) {
+		jetpackSearch = await searchAsync( {
+			query: undefined,
+			author: undefined,
+			groupId: 'wporg',
+			pageHandle: undefined,
+			pageSize: 20,
+			locale: 'en',
+			slug: pluginSlug,
+		} );
+		author_login = jetpackSearch?.data?.results[ 0 ]?.fields?.author_login;
+	}
+
+	return { ...request, author_login };
 }
 
 export function fetchPluginsList( options ) {

@@ -35,6 +35,7 @@ function generateApiQueryString( {
 	pageHandle,
 	pageSize,
 	locale,
+	slug,
 }: SearchParams ) {
 	const sort = 'score_default';
 
@@ -58,8 +59,10 @@ function generateApiQueryString( {
 		group_id: groupId,
 	};
 
-	if ( author ) {
-		params.filter = getFilterbyAuthor( author );
+	if ( slug ) {
+		params.filter = getFilterbyKey( 'slug', slug );
+	} else if ( author ) {
+		params.filter = getFilterbyKey( 'plugin.author', author );
 	}
 
 	return params;
@@ -85,14 +88,28 @@ export function search( options: SearchParams ) {
 	);
 }
 
-function getFilterbyAuthor( author: string ): {
+export async function searchAsync( options: SearchParams ) {
+	const queryString = generateApiQueryString( options );
+
+	return await wpcom.req.get(
+		{
+			path: marketplaceSearchApiBase,
+		},
+		{ ...queryString, apiVersion }
+	);
+}
+
+function getFilterbyKey(
+	key: string,
+	value: string
+): {
 	bool: {
 		must: { term: object }[];
 	};
 } {
 	return {
 		bool: {
-			must: [ { term: { 'plugin.author': author } } ],
+			must: [ { term: { [ key ]: value } } ],
 		},
 	};
 }

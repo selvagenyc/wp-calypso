@@ -87,6 +87,7 @@ export function getAllowedPluginData( plugin ) {
 		'author',
 		'author_profile',
 		'author_url',
+		'author_login',
 		'autoupdate',
 		'banners',
 		'compatibility',

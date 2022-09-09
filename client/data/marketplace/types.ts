@@ -87,4 +87,5 @@ export type SearchParams = {
 	pageHandle: string | undefined;
 	pageSize: number;
 	locale: string;
+	slug?: string;
 };
