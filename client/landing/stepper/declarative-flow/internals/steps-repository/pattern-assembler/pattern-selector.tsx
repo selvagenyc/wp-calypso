@@ -21,7 +21,11 @@ const PatternSelector = ( { patterns, onSelect, title, show }: PatternSelectorPr
 	};
 
 	return (
-		<div className="pattern-selector" style={ show ? {} : { height: 0, overflow: 'hidden' } }>
+		<div
+			className="pattern-selector"
+			style={ show ? {} : { height: 0, overflow: 'hidden' } }
+			tabIndex={ show ? undefined : -1 }
+		>
 			<div className="pattern-selector__header">
 				<h1>{ title }</h1>
 			</div>
