@@ -8,6 +8,7 @@ import { useI18n } from '@wordpress/react-i18n';
 import React, { FormEvent, useEffect } from 'react';
 import greenCheckmarkImg from 'calypso/assets/images/onboarding/green-checkmark.svg';
 import { ForwardedAutoresizingFormTextarea } from 'calypso/blocks/comments/autoresizing-form-textarea';
+import Jitm from 'calypso/blocks/jitm';
 import FormattedHeader from 'calypso/components/formatted-header';
 import FormFieldset from 'calypso/components/forms/form-fieldset';
 import FormLabel from 'calypso/components/forms/form-label';
@@ -144,6 +145,7 @@ const NewsletterSetup: Step = ( { navigation } ) => {
 
 	const stepContent = (
 		<form className="newsletter-setup__form" onSubmit={ onSubmit }>
+			<Jitm messagePath={ 'calypso:newsletter:setup' } />
 			<SiteIconWithPicker
 				site={ site }
 				disabled={ usesSite ? ! site : false }
