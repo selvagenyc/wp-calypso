@@ -40,7 +40,7 @@ function generateApiQueryString( {
 
 	const params: {
 		fields: string[];
-		filter?: { bool: { must: object[] } };
+		filter?: AuthorFilter;
 		page_handle?: string;
 		query: string;
 		sort: string;
@@ -85,14 +85,16 @@ export function search( options: SearchParams ) {
 	);
 }
 
-function getFilterbyAuthor( author: string ): {
+type AuthorFilter = {
 	bool: {
-		must: { term: object }[];
+		should: [ { term: object }, { match: object } ];
 	};
-} {
+};
+
+function getFilterbyAuthor( author: string ): AuthorFilter {
 	return {
 		bool: {
-			must: [ { term: { 'plugin.author.raw': author } } ],
+			should: [ { term: { 'plugin.author.raw': author } }, { match: { 'plugin.author': author } } ],
 		},
 	};
 }
