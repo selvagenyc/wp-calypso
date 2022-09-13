@@ -285,9 +285,11 @@ export class PluginsList extends Component {
 			} );
 	};
 
-	updateAllPlugins = () => {
-		this.handleUpdatePlugins( this.props.plugins );
-		this.recordEvent( 'Clicked Update all Plugins', true );
+	updateAllPlugins = ( accepted ) => {
+		if ( accepted ) {
+			this.handleUpdatePlugins( this.props.plugins );
+			this.recordEvent( 'Clicked Update all Plugins', true );
+		}
 	};
 
 	updateSelected = ( accepted ) => {
@@ -527,6 +529,26 @@ export class PluginsList extends Component {
 		}
 	};
 
+	updateAllPluginsDialog = () => {
+		const { translate } = this.props;
+
+		const siteDetails = this.props.selectedSiteSlug ? this.props.selectedSiteSlug : 'all sites';
+
+		acceptDialog(
+			<div>
+				<span>
+					{ translate( 'You are about to update all plugins on %(siteDetails)s', {
+						args: {
+							siteDetails: siteDetails,
+						},
+					} ) }
+				</span>
+			</div>,
+			( accepted ) => this.updateAllPlugins( accepted ),
+			translate( 'Update all plugins' )
+		);
+	};
+
 	removePluginDialog = ( selectedPlugin ) => {
 		const { plugins, translate } = this.props;
 
@@ -687,6 +709,7 @@ export class PluginsList extends Component {
 					autoupdateEnablePluginNotice={ () => this.bulkActionDialog( 'enableAutoupdates' ) }
 					autoupdateDisablePluginNotice={ () => this.bulkActionDialog( 'disableAutoupdates' ) }
 					updatePluginNotice={ () => this.bulkActionDialog( 'update' ) }
+					updateAllPluginsNotice={ () => this.updateAllPluginsDialog() }
 					haveActiveSelected={ this.props.plugins.some( this.filterSelection.active.bind( this ) ) }
 					haveInactiveSelected={ this.props.plugins.some(
 						this.filterSelection.inactive.bind( this )
@@ -705,6 +728,7 @@ export class PluginsList extends Component {
 						pluginUpdateCount={ this.props.pluginUpdateCount }
 						toggleBulkManagement={ this.toggleBulkManagement }
 						updateAllPlugins={ this.updateAllPlugins }
+						updateAllPluginsNotice={ this.updateAllPluginsDialog }
 						removePluginNotice={ this.removePluginDialog }
 						updatePlugin={ this.updatePlugin }
 					/>
