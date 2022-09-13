@@ -61,21 +61,12 @@ const PatternAssembler: Step = ( { navigation } ) => {
 		setShowPatternSelectorType( null );
 	};
 
-	const onDeselect = ( pattern: Pattern | null ) => {
-		if ( pattern ) {
-			if ( 'header' === showPatternSelectorType ) setHeader( null );
-			if ( 'footer' === showPatternSelectorType ) setFooter( null );
-			// if ( 'section' === showPatternSelectorType ) deleteSection( pattern );
+	const onBack = () => {
+		if ( showPatternSelectorType ) {
+			setShowPatternSelectorType( null );
+		} else {
+			goBack();
 		}
-
-		setShowPatternSelectorType( null );
-	};
-
-	const getPatternSelected = (): Pattern | null => {
-		if ( 'header' === showPatternSelectorType ) return header;
-		if ( 'footer' === showPatternSelectorType ) return footer;
-		// if ( 'section' === showPatternSelectorType ) return section;
-		return null;
 	};
 
 	const stepContent = (
@@ -83,9 +74,7 @@ const PatternAssembler: Step = ( { navigation } ) => {
 			<div className="pattern-assembler__sidebar">
 				<PatternSelectorLoader
 					showPatternSelectorType={ showPatternSelectorType }
-					pattern={ getPatternSelected() }
 					onSelect={ onSelect }
-					onDeselect={ onDeselect }
 				/>
 				{ ! showPatternSelectorType && (
 					<PatternLayout
@@ -130,7 +119,7 @@ const PatternAssembler: Step = ( { navigation } ) => {
 	return (
 		<StepContainer
 			stepName={ 'pattern-assembler' }
-			goBack={ goBack }
+			goBack={ onBack }
 			goNext={ goNext }
 			isHorizontalLayout={ false }
 			isWideLayout={ true }
