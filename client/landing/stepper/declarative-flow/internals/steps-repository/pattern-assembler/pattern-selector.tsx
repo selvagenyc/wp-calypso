@@ -22,7 +22,7 @@ const PatternSelector = ( { patterns, onSelect, title, show }: PatternSelectorPr
 	};
 
 	useEffect( () => {
-		document.activeElement?.blur();
+		document.body?.blur();
 	}, [ show ] );
 
 	return (
