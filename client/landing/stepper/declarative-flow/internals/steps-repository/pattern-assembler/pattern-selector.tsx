@@ -1,6 +1,7 @@
 import { Button } from '@automattic/components';
 import { useLocale } from '@automattic/i18n-utils';
 import { useTranslate } from 'i18n-calypso';
+import { useEffect } from 'react';
 import PatternPreviewAutoHeight from './pattern-preview-auto-height';
 import { getPatternPreviewUrl, handleKeyboard } from './utils';
 import type { Pattern } from './types';
@@ -19,6 +20,10 @@ const PatternSelector = ( { patterns, onSelect, title, show }: PatternSelectorPr
 	const handleBackClick = () => {
 		onSelect( null );
 	};
+
+	useEffect( () => {
+		document.activeElement?.blur();
+	}, [ show ] );
 
 	return (
 		<div
