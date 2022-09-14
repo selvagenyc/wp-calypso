@@ -52,6 +52,7 @@ const PatternAssemblerPreview = ( { header, sections = [], footer }: Props ) => 
 
 	return (
 		<div
+			tabIndex={ undefined }
 			className={ classnames( 'pattern-assembler-preview', {
 				'pattern-assembler-preview--has-selected-patterns': hasSelectedPatterns,
 			} ) }
