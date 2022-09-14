@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import PlanPill from 'calypso/components/plans/plan-pill';
 import PlanPrice from 'calypso/my-sites/plan-price';
 import { getCurrentFlowName } from 'calypso/state/signup/flow/selectors';
+import { getCurrentPlan } from 'calypso/state/sites/plans/selectors';
+import { getSelectedSiteId } from 'calypso/state/ui/selectors';
 
 const PLANS_LIST = getPlans();
 
@@ -165,6 +167,9 @@ PlanFeaturesComparisonHeader.propTypes = {
 	title: PropTypes.string.isRequired,
 	translate: PropTypes.func,
 
+	// connected props
+	currentSitePlan: PropTypes.object,
+
 	// For Monthly Pricing test
 	annualPricePerMonth: PropTypes.number,
 	flow: PropTypes.string,
@@ -175,7 +180,10 @@ PlanFeaturesComparisonHeader.defaultProps = {
 };
 
 export default connect( ( state ) => {
+	const selectedSiteId = getSelectedSiteId( state );
+	const currentSitePlan = getCurrentPlan( state, selectedSiteId );
 	return {
 		flow: getCurrentFlowName( state ),
+		currentSitePlan,
 	};
 } )( localize( PlanFeaturesComparisonHeader ) );

@@ -333,7 +333,6 @@ export class PlansFeaturesMain extends Component {
 		if ( showTreatmentPlansReorderTest ) {
 			return plans.reverse();
 		}
-
 		return plans;
 	}
 
@@ -359,7 +358,14 @@ export class PlansFeaturesMain extends Component {
 	}
 
 	getVisiblePlansForPlanFeatures( availablePlans ) {
-		const { customerType, selectedPlan, plansWithScroll, isAllPaidPlansShown } = this.props;
+		const {
+			customerType,
+			selectedPlan,
+			plansWithScroll,
+			isAllPaidPlansShown,
+			isInMarketplace,
+			sitePlanSlug,
+		} = this.props;
 
 		const isPlanOneOfType = ( plan, types ) =>
 			types.filter( ( type ) => planMatches( plan, { type } ) ).length > 0;
@@ -391,6 +397,13 @@ export class PlansFeaturesMain extends Component {
 		}
 
 		const withIntervalSelector = this.getKindOfPlanTypeSelector( this.props ) === 'interval';
+
+		if ( isInMarketplace ) {
+			return plans.filter(
+				( plan ) =>
+					plan === sitePlanSlug || isPlanOneOfType( plan, [ TYPE_BUSINESS, TYPE_ECOMMERCE ] )
+			);
+		}
 
 		if ( isAllPaidPlansShown || withIntervalSelector ) {
 			return plans.filter( ( plan ) =>
@@ -524,7 +537,7 @@ PlansFeaturesMain.propTypes = {
 	isChatAvailable: PropTypes.bool,
 	isInSignup: PropTypes.bool,
 	isLandingPage: PropTypes.bool,
-
+	isInMarketplace: PropTypes.bool,
 	onUpgradeClick: PropTypes.func,
 	redirectTo: PropTypes.string,
 	selectedFeature: PropTypes.string,
