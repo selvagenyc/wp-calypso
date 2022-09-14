@@ -56,7 +56,7 @@ export default function PluginManagementV2( {
 				{ !! pluginUpdateCount && (
 					<ButtonGroup>
 						<Button compact primary onClick={ updateAllPluginsNotice }>
-							{ translate( 'Updates %(numUpdates)d Plugin', 'Update %(numUpdates)d Plugins', {
+							{ translate( 'Update %(numUpdates)d Plugin', 'Update %(numUpdates)d Plugins', {
 								context: 'button label',
 								count: pluginUpdateCount,
 								args: {
