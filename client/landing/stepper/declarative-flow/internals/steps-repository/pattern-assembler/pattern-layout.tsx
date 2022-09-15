@@ -1,5 +1,7 @@
 import { Button } from '@automattic/components';
+import classnames from 'classnames';
 import { useTranslate } from 'i18n-calypso';
+import { useState } from 'react';
 import PatternActionBar from './pattern-action-bar';
 import type { Pattern } from './types';
 
@@ -33,6 +35,11 @@ const PatternLayout = ( {
 	onContinueClick,
 }: PatternLayoutProps ) => {
 	const translate = useTranslate();
+	const [ isFocused, setIsFocused ] = useState( false );
+
+	const handleItemFocus = () => {
+		setIsFocused( true );
+	};
 
 	return (
 		<div className="pattern-layout">
@@ -43,7 +50,11 @@ const PatternLayout = ( {
 			<div className="pattern-layout__body">
 				<ul>
 					{ header ? (
-						<li className="pattern-layout__list-item pattern-layout__list-item--header">
+						<li
+							className="pattern-layout__list-item pattern-layout__list-item--header"
+							// eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+							tabIndex={ 0 }
+						>
 							<span className="pattern-layout__list-item-text" title={ header.name }>
 								{ header.name }
 							</span>
@@ -63,6 +74,8 @@ const PatternLayout = ( {
 							<li
 								key={ `${ index }-${ id }` }
 								className="pattern-layout__list-item pattern-layout__list-item--section"
+								// eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+								tabIndex={ 0 }
 							>
 								<span className="pattern-layout__list-item-text" title={ name }>
 									{ name }
@@ -88,7 +101,17 @@ const PatternLayout = ( {
 						</Button>
 					</li>
 					{ footer ? (
-						<li className="pattern-layout__list-item pattern-layout__list-item--footer">
+						<li
+							className={ classnames(
+								'pattern-layout__list-item pattern-layout__list-item--footer',
+								{
+									'is-focused': isFocused,
+								}
+							) }
+							// eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+							tabIndex={ 0 }
+							onFocus={ handleItemFocus }
+						>
 							<span className="pattern-layout__list-item-text" title={ footer.name }>
 								{ footer.name }
 							</span>
