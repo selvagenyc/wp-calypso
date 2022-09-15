@@ -1,5 +1,6 @@
 import { Button } from '@automattic/components';
 import { useLocale } from '@automattic/i18n-utils';
+import classnames from 'classnames';
 import { useTranslate } from 'i18n-calypso';
 import { useEffect } from 'react';
 import PatternPreviewAutoHeight from './pattern-preview-auto-height';
@@ -22,13 +23,15 @@ const PatternSelector = ( { patterns, onSelect, title, show }: PatternSelectorPr
 	};
 
 	useEffect( () => {
-		document.body?.blur();
-		document.activeElement?.blur();
+		document.querySelector( '.pattern-selector--active' )?.focus();
+		document.querySelector( '.pattern-selector--active' )?.removeAttribute( 'tabindex' );
 	}, [ show ] );
 
 	return (
 		<div
-			className="pattern-selector"
+			className={ classnames( 'pattern-selector', {
+				'pattern-selector--active': show,
+			} ) }
 			style={ show ? {} : { height: 0, overflow: 'hidden' } }
 			tabIndex={ show ? undefined : -1 }
 		>
@@ -46,7 +49,7 @@ const PatternSelector = ( { patterns, onSelect, title, show }: PatternSelectorPr
 						>
 							<div
 								aria-label={ item.name }
-								tabIndex={ index ? 0 : 1 }
+								tabIndex={ 0 }
 								role="option"
 								aria-selected={ false }
 								onClick={ () => onSelect( item ) }

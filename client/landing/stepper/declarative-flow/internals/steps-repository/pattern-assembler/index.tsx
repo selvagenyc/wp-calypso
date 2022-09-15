@@ -63,7 +63,7 @@ const PatternAssembler: Step = ( { navigation } ) => {
 
 	const stepContent = (
 		<div className="pattern-assembler__wrapper">
-			<div className="pattern-assembler__sidebar" tabIndex={ undefined }>
+			<div className="pattern-assembler__sidebar">
 				<PatternSelectorLoader
 					showPatternSelectorType={ showPatternSelectorType }
 					onSelect={ onSelect }
