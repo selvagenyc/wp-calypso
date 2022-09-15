@@ -20,10 +20,15 @@ import { BASE_STALE_TIME, WPORG_CACHE_KEY } from './constants';
 import { Plugin, PluginQueryOptions } from './types';
 import { getPluginsListKey } from './utils';
 
+interface WPORGPluginsResponse {
+	plugins: Plugin[];
+	info: { page: number };
+}
+
 export const getWPORGPluginsQueryParams = (
 	options: PluginQueryOptions,
 	locale: string
-): [ QueryKey, QueryFunction< { plugins: Plugin[]; info: { page: number } }, QueryKey > ] => {
+): [ QueryKey, QueryFunction< WPORGPluginsResponse, QueryKey > ] => {
 	const cacheKey = getPluginsListKey( WPORG_CACHE_KEY, options );
 	const fetchFn = () => {
 		const [ search, author ] = extractSearchInformation( options.searchTerm );
@@ -42,18 +47,19 @@ export const getWPORGPluginsQueryParams = (
 
 export const useWPORGPlugins = (
 	options: PluginQueryOptions,
-	{ enabled = true, staleTime = BASE_STALE_TIME, refetchOnMount = true }: UseQueryOptions = {}
+	queryOptions?: UseQueryOptions
 ): UseQueryResult => {
 	const locale = useSelector( getCurrentUserLocale );
 
 	return useQuery( ...getWPORGPluginsQueryParams( options, locale ), {
-		select: ( { plugins = [], info = {} } ) => ( {
-			plugins: normalizePluginsList( plugins ),
-			pagination: info,
-		} ),
-		enabled: enabled,
-		staleTime: staleTime,
-		refetchOnMount: refetchOnMount,
+		...queryOptions,
+		select: ( data ) => {
+			const { plugins, info } = data as WPORGPluginsResponse;
+			return {
+				plugins: normalizePluginsList( plugins ),
+				pagination: info,
+			};
+		},
 	} );
 };
 

@@ -37,11 +37,15 @@ const fetchWPCOMPlugins = ( type: Type, searchTerm?: string, tag?: string ) => {
 	);
 };
 
+interface WPCOMPluginsResponse {
+	results: Array< { [ plugin: string ]: Plugin } >;
+}
+
 export const getWPCOMPluginsQueryParams = (
 	type: Type,
 	searchTerm?: string,
 	tag?: string
-): [ QueryKey, QueryFunction< { results: Array< { [ plugin: string ]: Plugin } > } > ] => {
+): [ QueryKey, QueryFunction< WPCOMPluginsResponse > ] => {
 	const cacheKey = getCacheKey( type + searchTerm + tag );
 	const fetchFn = () => fetchWPCOMPlugins( type, searchTerm, tag );
 	return [ cacheKey, fetchFn ];
@@ -53,20 +57,18 @@ export const getWPCOMPluginsQueryParams = (
  * @param {Type} type Optional The query type
  * @param {string} searchTerm Optional The term to search for
  * @param {string} tag Optional The tag to search for
- * @param {{enabled: boolean, staleTime: number, refetchOnMount: boolean}} {} Optional options to pass to the underlying query engine
+ * @param {UseQueryOptions} queryOptions Optional options to pass to the underlying query engine
  * @returns {{ data, error, isLoading: boolean ...}} Returns various parameters piped from `useQuery`
  */
 export const useWPCOMPlugins = (
 	type: Type,
 	searchTerm?: string,
 	tag?: string,
-	{ enabled = true, staleTime = BASE_STALE_TIME, refetchOnMount = true }: UseQueryOptions = {}
+	queryOptions?: UseQueryOptions
 ): UseQueryResult => {
 	return useQuery( ...getWPCOMPluginsQueryParams( type, searchTerm, tag ), {
-		select: ( data ) => normalizePluginsList( data.results ),
-		enabled: enabled,
-		staleTime: staleTime,
-		refetchOnMount: refetchOnMount,
+		...queryOptions,
+		select: ( data ) => normalizePluginsList( ( data as WPCOMPluginsResponse ).results ),
 	} );
 };
 
@@ -109,18 +111,12 @@ export const getWPCOMFeaturedPluginsQueryParams = (): [ QueryKey, QueryFunction<
 /**
  * Returns the featured list of plugins from WPCOM
  *
- * @param {{enabled: boolean, staleTime: number, refetchOnMount: boolean}} {} Optional options to pass to the underlying query engine
+ * @param {UseQueryOptions} queryOptions Optional options to pass to the underlying query engine
  * @returns {{ data, error, isLoading: boolean ...}} Returns various parameters piped from `useQuery`
  */
-export const useWPCOMFeaturedPlugins = ( {
-	enabled = true,
-	staleTime = BASE_STALE_TIME,
-	refetchOnMount = true,
-}: UseQueryOptions = {} ): UseQueryResult => {
+export const useWPCOMFeaturedPlugins = ( queryOptions?: UseQueryOptions ): UseQueryResult => {
 	return useQuery( ...getWPCOMFeaturedPluginsQueryParams(), {
-		select: ( data ) => normalizePluginsList( data ),
-		enabled,
-		staleTime,
-		refetchOnMount,
+		...queryOptions,
+		select: normalizePluginsList,
 	} );
 };
