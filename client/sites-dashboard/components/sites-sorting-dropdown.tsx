@@ -1,9 +1,14 @@
-import { Gridicon, SitesTableSortKey, SitesTableSortOrder } from '@automattic/components';
+import {
+	Gridicon,
+	SitesTableSortOptions,
+	SitesTableSortKey,
+	SitesTableSortOrder,
+} from '@automattic/components';
 import styled from '@emotion/styled';
 import { Button, Dropdown, MenuGroup, MenuItem } from '@wordpress/components';
-import { useMediaQuery } from '@wordpress/compose';
+import { createHigherOrderComponent, useMediaQuery } from '@wordpress/compose';
 import { useI18n } from '@wordpress/react-i18n';
-import { useMemo } from 'react';
+import { ComponentType, useMemo } from 'react';
 import { useAsyncPreference } from 'calypso/state/preferences/use-async-preference';
 import { SMALL_MEDIA_QUERY } from '../utils';
 
@@ -40,30 +45,41 @@ export const parseSitesSorting = ( sorting: SitesSorting | 'none' ) => {
 	};
 };
 
-export const useSitesSortingPreference = () =>
-	useAsyncPreference< SitesSorting >( {
-		defaultValue: `${ DEFAULT_SITES_SORTING.sortKey }-${ DEFAULT_SITES_SORTING.sortOrder }`,
+export const stringifySitesSorting = (
+	sorting: Required< SitesTableSortOptions >
+): SitesSorting => {
+	return `${ sorting.sortKey }-${ sorting.sortOrder }`;
+};
+
+export const useSitesSorting = (): WithSitesSortingPreferenceProps => {
+	const [ sitesSorting, onSitesSortingChange ] = useAsyncPreference< SitesSorting >( {
+		defaultValue: stringifySitesSorting( DEFAULT_SITES_SORTING ),
 		preferenceName: 'sites-sorting',
 	} );
 
-interface SitesSortingDropdownProps {
-	onSitesSortingChange( newValue: SitesSorting ): void;
-	sitesSorting: ReturnType< typeof useSitesSortingPreference >[ 0 ];
-}
+	return {
+		hasSitesSortingPreferenceLoaded: sitesSorting !== 'none',
+		sitesSorting: parseSitesSorting( sitesSorting ),
+		onSitesSortingChange,
+	};
+};
+
+type SitesSortingDropdownProps = WithSitesSortingPreferenceProps;
 
 export const SitesSortingDropdown = ( {
 	onSitesSortingChange,
 	sitesSorting,
+	hasSitesSortingPreferenceLoaded,
 }: SitesSortingDropdownProps ) => {
 	const isSmallScreen = useMediaQuery( SMALL_MEDIA_QUERY );
 	const { __ } = useI18n();
 
 	const label = useMemo( () => {
-		if ( sitesSorting === 'none' ) {
+		if ( ! hasSitesSortingPreferenceLoaded ) {
 			return null;
 		}
 
-		switch ( sitesSorting ) {
+		switch ( stringifySitesSorting( sitesSorting ) ) {
 			case `lastInteractedWith${ SEPARATOR }desc`:
 				return __( 'Sorted automagically' );
 
@@ -76,9 +92,9 @@ export const SitesSortingDropdown = ( {
 			default:
 				throw new Error( `invalid sort value ${ sitesSorting }` );
 		}
-	}, [ __, sitesSorting ] );
+	}, [ __, sitesSorting, hasSitesSortingPreferenceLoaded ] );
 
-	if ( sitesSorting === 'none' ) {
+	if ( ! hasSitesSortingPreferenceLoaded ) {
 		return null;
 	}
 
@@ -126,3 +142,22 @@ export const SitesSortingDropdown = ( {
 		/>
 	);
 };
+
+export interface WithSitesSortingPreferenceProps {
+	hasSitesSortingPreferenceLoaded: boolean;
+	onSitesSortingChange( newValue: SitesSorting ): void;
+	sitesSorting: Required< SitesTableSortOptions >;
+}
+
+export const withSitesSortingPreference = createHigherOrderComponent(
+	< OuterProps, >( Component: ComponentType< OuterProps > ) => {
+		const ComponentWithSitesSorting: ComponentType<
+			Omit< OuterProps, keyof WithSitesSortingPreferenceProps >
+		> = ( props ) => {
+			return <Component { ...( props as OuterProps ) } { ...useSitesSorting() } />;
+		};
+
+		return ComponentWithSitesSorting;
+	},
+	'withSitesSortingPreference'
+);

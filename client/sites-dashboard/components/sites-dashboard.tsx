@@ -26,7 +26,7 @@ import {
 } from './sites-content-controls';
 import { useSitesDisplayMode } from './sites-display-mode-switcher';
 import { SitesGrid } from './sites-grid';
-import { parseSitesSorting, useSitesSortingPreference } from './sites-sorting-dropdown';
+import { useSitesSorting } from './sites-sorting-dropdown';
 import { SitesTable } from './sites-table';
 
 interface SitesDashboardProps {
@@ -152,12 +152,8 @@ export function SitesDashboard( {
 		status,
 	} );
 
-	const [ sitesSorting, onSitesSortingChange ] = useSitesSortingPreference();
-
-	const { sortedSites } = useSitesTableSorting(
-		sitesSorting === 'none' ? [] : filteredSites,
-		parseSitesSorting( sitesSorting )
-	);
+	const { hasSitesSortingPreferenceLoaded, sitesSorting, onSitesSortingChange } = useSitesSorting();
+	const { sortedSites } = useSitesTableSorting( filteredSites, sitesSorting );
 
 	const paginatedSites = sortedSites.slice( ( page - 1 ) * perPage, page * perPage );
 
@@ -165,7 +161,7 @@ export function SitesDashboard( {
 
 	const [ displayMode, setDisplayMode ] = useSitesDisplayMode();
 
-	const userPreferencesLoaded = 'none' !== sitesSorting && 'none' !== displayMode;
+	const userPreferencesLoaded = hasSitesSortingPreferenceLoaded && 'none' !== displayMode;
 
 	const elementRef = useRef( window );
 
@@ -213,6 +209,7 @@ export function SitesDashboard( {
 							onDisplayModeChange={ setDisplayMode }
 							sitesSorting={ sitesSorting }
 							onSitesSortingChange={ onSitesSortingChange }
+							hasSitesSortingPreferenceLoaded={ hasSitesSortingPreferenceLoaded }
 						/>
 					) }
 					{ userPreferencesLoaded && (
